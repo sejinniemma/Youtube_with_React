@@ -7,6 +7,21 @@ import VideoList from './components/video_list/video_list';
 function App() {
   const [videos, setVideos] = useState([]);
 
+  // when search
+  const search = query => {
+    const requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    
+    fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${query}&maxResults=25&type=video&key=AIzaSyCZ6t-whXlyEcmCNGrOk-6f7WVRGCCaQsM`, requestOptions)
+      .then(response => response.json())
+      .then(result => result.items.map(item=>({...item,id:item.id.videoId})))
+      .then(items => setVideos(items))
+      .catch(error => console.log('error', error));
+  }
+
+  // load 25 most popular video list
   useEffect(()=>{
     const requestOptions = {
       method: 'GET',
@@ -21,7 +36,7 @@ function App() {
   },[])
 
   return  <div className={styles.app}>
-              <SearchHeader />
+              <SearchHeader onSearch={search}/>
               <VideoList videos={videos}/>
           </div>
 }
