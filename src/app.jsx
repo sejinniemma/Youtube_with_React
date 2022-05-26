@@ -13,10 +13,13 @@ function App({youtube}) {
     setSelectedVideo(video);
   }
 
+ 
   // when search
   const search = query => {
     youtube.search(query) //
-    .then(videos => setVideos(videos));
+    .then(videos => {setVideos(videos); 
+                    setSelectedVideo(null)});
+    
   }
 
   // load 25 most popular video list
